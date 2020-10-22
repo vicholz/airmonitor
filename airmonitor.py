@@ -138,11 +138,12 @@ if __name__ == "__main__":
     state = airmon.compare_states()
     logging.debug("state:", state)
     logging.debug("data:\n", json.dumps(airmon.state, sort_keys=True, indent=4))
+    recipients = [(x,x) for x in config("RECIPIENTS").split(",")]
     if state == 1:
         logging.info("State changed: GOOD->BAD")
         airmon.notify_sendgrid(
             from_email=config("FROM_EMAIL"),
-            recipients=config("RECIPIENTS"),
+            recipients=recipients,
             subject="AQI STATUS: BAD - AQI OR TEMP OUT OF DESIRED RANGE.",
             message="""
 PM2.5: {pm25}<br>
@@ -154,7 +155,7 @@ Temp: {temp}<br>
         logging.info("State changed: BAD->GOOD")
         airmon.notify_sendgrid(
             from_email=config("FROM_EMAIL"),
-            recipients=config("RECIPIENTS"),
+            recipients=recipients,
             subject="AQI STATUS: GOOD - AQI OR TEMP IS WITHIN DESIRED RANGE.",
             message="""
 PM2.5: {pm25}<br>
