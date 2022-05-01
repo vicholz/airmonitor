@@ -28,7 +28,7 @@ class OpenWeather:
 
     def get_data(self, zipcode):
         data = self.get_raw_data(zipcode)
-        logging.debug(data)
+        print(data)
         return data["main"]["feels_like"]
         
 
