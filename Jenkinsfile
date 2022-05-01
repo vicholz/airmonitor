@@ -22,7 +22,6 @@ pipeline {
                 string(credentialsId: 'OPENWEATHER_API_KEY', variable: 'OPENWEATHER_API_KEY'),
                 string(credentialsId: 'MAILCHIMP_API_KEY', variable: 'MAILCHIMP_API_KEY'),
                 string(credentialsId: 'MAILCHIMP_CHAMPAIGN_ID', variable: 'MAILCHIMP_CHAMPAIGN_ID'),
-                string(credentialsId: 'ZIPCODE', variable: 'ZIPCODE'),
                 string(credentialsId: 'FROM_EMAIL', variable: 'FROM_EMAIL'),
                 string(credentialsId: 'RECIPIENTS', variable: 'RECIPIENTS'),
             ]) {
