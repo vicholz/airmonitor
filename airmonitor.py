@@ -117,7 +117,7 @@ if __name__ == "__main__":
 
     log_format = logging.Formatter("%(asctime)s - %(process)s - %(name)s - %(levelname)s - [%(module)s]: %(message)s")
 
-    logging.basicos.environ.get(
+    logging.basicConfig(
         format="%(asctime)s - %(process)s - %(name)s - %(levelname)s - [%(module)s]: %(message)s",
         filemode='a',
         level=log_level,
