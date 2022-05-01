@@ -3,7 +3,6 @@ import json
 import logging
 import requests
 import os
-from decouple import config
 from collections import defaultdict
 
 try:
@@ -15,7 +14,7 @@ except:
 AIRNOW_URL = "https://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&zipCode={zipcode}&distance={distance}&API_KEY={api_key}"
 
 class Airnow:
-    def __init__(self, api_key=config('AIRNOW_API_KEY')):
+    def __init__(self, api_key=os.environ.get('AIRNOW_API_KEY')):
         self.api_key = api_key
         self.session = requests.session()
         self.session.verify = False

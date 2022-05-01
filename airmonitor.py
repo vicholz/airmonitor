@@ -5,7 +5,6 @@ import logging
 import datetime
 import sys
 from logging import handlers
-from decouple import config
 from collections import defaultdict
 from airnow import Airnow
 from openweather import OpenWeather
@@ -40,7 +39,7 @@ class AirMonitor:
         logging.debug("Saved state: \n {state_string}".format(**locals()))
         logging.info("Saving current state '{file}'...DONE!".format(**locals()))
 
-    def get_aqi_data(self, zipcode=config('ZIPCODE')):
+    def get_aqi_data(self, zipcode=os.environ.get('ZIPCODE')):
         logging.info("Getting AQI data for {zipcode}...".format(**locals()))
         airnow = Airnow()
         aqi_data = airnow.get_data(zipcode)
@@ -48,7 +47,7 @@ class AirMonitor:
         self.state["aqi"] = aqi_data
         logging.info("Getting AQI data for {zipcode}...DONE!".format(**locals()))
 
-    def get_weather_data(self, zipcode=config('ZIPCODE')):
+    def get_weather_data(self, zipcode=os.environ.get('ZIPCODE')):
         logging.info("Getting weather data for {zipcode}...".format(**locals()))
         ow = OpenWeather()
         weather_data = ow.get_data(zipcode)
@@ -82,8 +81,8 @@ class AirMonitor:
         if current_status == previous_status: return 0
         if not current_status and previous_status: return -1
 
-    def notify_mailchimp(self, state, campaign_id=config('MAILCHIMP_CHAMPAIGN_ID')):
-        client = MailChimp(config('MAILCHIMP_API_KEY'))
+    def notify_mailchimp(self, state, campaign_id=os.environ.get('MAILCHIMP_CHAMPAIGN_ID')):
+        client = MailChimp(os.environ.get('MAILCHIMP_API_KEY'))
         # print(client.campaigns.content.get(campaign_id=campaign_id))
         client.campaigns.actions.pause(campaign_id=campaign_id)
         client.campaigns.content.update(campaign_id=campaign_id, data={
@@ -93,14 +92,14 @@ class AirMonitor:
         client.campaigns.actions.send(campaign_id=campaign_id)
         # client.campaigns.send(campaign_id)
     
-    def notify_sendgrid(self, subject, message, recipients, from_email, api_key=config('SENDGRID_API_KEY')):
+    def notify_sendgrid(self, subject, message, recipients, from_email, api_key=os.environ.get('SENDGRID_API_KEY')):
         message = Mail(
             from_email=from_email,
             to_emails=recipients,
             subject=subject,
             html_content=message)
         try:
-            sg = SendGridAPIClient(config('SENDGRID_API_KEY'))
+            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
             response = sg.send(message)
             logging.info("Notification sent.")
             logging.debug(response.status_code)
@@ -113,12 +112,12 @@ class AirMonitor:
 
 if __name__ == "__main__":
     log_level = logging.INFO
-    if config("DEBUG", "FALSE") ==  "TRUE":
+    if os.environ.get("DEBUG", "FALSE") ==  "TRUE":
         log_level = logging.DEBUG
 
     log_format = logging.Formatter("%(asctime)s - %(process)s - %(name)s - %(levelname)s - [%(module)s]: %(message)s")
 
-    logging.basicConfig(
+    logging.basicos.environ.get(
         format="%(asctime)s - %(process)s - %(name)s - %(levelname)s - [%(module)s]: %(message)s",
         filemode='a',
         level=log_level,
@@ -138,11 +137,11 @@ if __name__ == "__main__":
     state = airmon.compare_states()
     logging.debug("state:", state)
     logging.debug("data:\n", json.dumps(airmon.state, sort_keys=True, indent=4))
-    recipients = [(x,x) for x in config("RECIPIENTS").split(",")]
+    recipients = [(x,x) for x in os.environ.get("RECIPIENTS").split(",")]
     if state == 1:
         logging.info("State changed: GOOD->BAD")
         airmon.notify_sendgrid(
-            from_email=config("FROM_EMAIL"),
+            from_email=os.environ.get("FROM_EMAIL"),
             recipients=recipients,
             subject="AQI STATUS: BAD - AQI OR TEMP OUT OF DESIRED RANGE.",
             message="""
@@ -154,7 +153,7 @@ Temp: {temp}<br>
     elif state == -1:
         logging.info("State changed: BAD->GOOD")
         airmon.notify_sendgrid(
-            from_email=config("FROM_EMAIL"),
+            from_email=os.environ.get("FROM_EMAIL"),
             recipients=recipients,
             subject="AQI STATUS: GOOD - AQI OR TEMP IS WITHIN DESIRED RANGE.",
             message="""
