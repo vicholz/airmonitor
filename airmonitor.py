@@ -111,7 +111,10 @@ class AirMonitor:
 
 
 if __name__ == "__main__":
-    log_level = logging.INFO
+    try:
+        logging.config.fileConfig("logging.conf")
+    except:
+        pass
     if os.environ.get("DEBUG", "FALSE") ==  "TRUE":
         log_level = logging.DEBUG
 

@@ -1,18 +1,10 @@
 #!/usr/bin/env python3
-import argparse
 import datetime
 import json
+import logging
 import os
-import re
-import shutil
-import socket
-import sys
-import time
-import unittest
 
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.chrome import service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -72,6 +64,7 @@ class AQIScraper:
         self.driver.implicitly_wait(30)
     
     def get_data(self, url=URL):
+        logging.debug("Getting data...")
         self.driver.get(url)
         self.driver.save_screenshot("load.png")
         

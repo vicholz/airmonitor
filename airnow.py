@@ -22,12 +22,14 @@ class Airnow:
             raise Exception("No Airnow API key specified or found in AIRNOW_API_KEY env variable.")
     
     def get_raw_data(self, zipcode, distance=25):
+        logging.debug("Getting results...")
         URL = AIRNOW_URL.format(**locals(), api_key=self.api_key)
         data = self.session.get(URL).json()
         logging.debug(data)
         return data
     
     def get_data(self, zipcode, distance=25):
+        logging.debug("Getting data from results...")
         data = self.get_raw_data(zipcode, distance)
         results = defaultdict(dict)
         for result in data:

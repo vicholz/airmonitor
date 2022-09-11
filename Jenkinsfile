@@ -39,6 +39,7 @@ python3 airmonitor.py
 export PM25=$(jq '.aqi."PM2.5".AQI' airmonitor_data.json)
 export O3=$(jq '.aqi."O3".AQI' airmonitor_data.json)
 export TEMP=$(jq '.temp' airmonitor_data.json)
+export DEBUG=true
 
 MESSAGE="PM2.5: ${PM25} - 03: ${O3} - TEMP: ${TEMP}F"
 echo "MESSAGE='${MESSAGE}'" > build.properties

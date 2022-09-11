@@ -21,12 +21,14 @@ class OpenWeather:
             raise Exception("No OpenWeather API key specified or found in OPENWEATHER_API_KEY env variable.")
     
     def get_raw_data(self, zipcode):
+        logging.debug("Getting results...")
         URL = OPENWEATHER_URL.format(**locals(), api_key=self.api_key)
         data = self.session.get(URL).json()
         logging.debug(data)
         return data
 
     def get_data(self, zipcode):
+        logging.debug("Getting data...")
         data = self.get_raw_data(zipcode)
         return data["main"]["feels_like"]
         
