@@ -33,6 +33,12 @@ preferences = {
 
 class AQIScraper:
     def __init__(self):
+        try:
+            logging.config.fileConfig("logging.conf")
+        except:
+            pass
+        if os.environ.get("DEBUG", "FALSE") ==  "TRUE":
+            logging.getLogger().setLevel(logging.DEBUG)
         chrome_options = Options()
         chrome_options.add_experimental_option("prefs", preferences)
         chrome_options.add_argument("--headless")

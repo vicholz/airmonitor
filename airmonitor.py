@@ -3,7 +3,6 @@ import json
 import os
 import logging
 import datetime
-import sys
 from logging import handlers
 from collections import defaultdict
 from airnow import Airnow
@@ -116,16 +115,25 @@ if __name__ == "__main__":
     except:
         pass
     if os.environ.get("DEBUG", "FALSE") ==  "TRUE":
-        log_level = logging.DEBUG
+        logging.getLogger().setLevel(logging.DEBUG)
 
     airmon = AirMonitor()
+    logging.debug("Loading previous state...")
     airmon.load_previous_state()
+    logging.debug("Loading previous state...DONE!")
+    logging.debug("Getting AQI data...")
     airmon.get_aqi_data()
+    logging.debug("Getting AQI data...DONE!")
+    logging.debug("Getting weather data...")
     airmon.get_weather_data()
+    logging.debug("Getting weather data...DONE!")
+    logging.debug("Comparing states...")
     state = airmon.compare_states()
+    logging.debug("Comparing states...DONE!")
     logging.debug("state:", state)
     logging.debug("data:\n", json.dumps(airmon.state, sort_keys=True, indent=4))
     recipients = [(x,x) for x in os.environ.get("RECIPIENTS").split(",")]
+    logging.debug("Sending email notifications...")
     if state == 1:
         logging.info("State changed: GOOD->BAD")
         airmon.notify_sendgrid(
@@ -150,5 +158,6 @@ O3: {o3}<br>
 Temp: {temp}<br>
 """.format(pm25=airmon.state['aqi']['PM2.5']['AQI'], o3=airmon.state['aqi']['O3']['AQI'], temp=airmon.state['temp'])
         )
+    logging.debug("Saving state...")
     airmon.save_state()
     exit(0)

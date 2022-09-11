@@ -20,6 +20,12 @@ class Airnow:
         self.session.verify = False
         if not self.api_key:
             raise Exception("No Airnow API key specified or found in AIRNOW_API_KEY env variable.")
+        try:
+            logging.config.fileConfig("logging.conf")
+        except:
+            pass
+        if os.environ.get("DEBUG", "FALSE") == "TRUE":
+            logging.getLogger().setLevel(logging.DEBUG)
     
     def get_raw_data(self, zipcode, distance=25):
         logging.debug("Getting results...")
