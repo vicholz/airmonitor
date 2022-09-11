@@ -30,7 +30,6 @@ echo "MAILCHIMP_CHAMPAIGN_ID=${MAILCHIMP_CHAMPAIGN_ID}" >> .env
 echo "FROM_EMAIL=${FROM_EMAIL}" >> .env
 echo "RECIPIENTS=${RECIPIENTS}" >> .env
 
-export DEBUG=true
 python3 airmonitor.py
 export PM25=$(jq '.aqi."PM2.5".AQI' airmonitor_data.json)
 export O3=$(jq '.aqi."O3".AQI' airmonitor_data.json)
