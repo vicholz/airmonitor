@@ -2,6 +2,7 @@
 import json
 import logging
 import requests
+import urllib3
 import os
 from collections import defaultdict
 
@@ -24,7 +25,7 @@ class Airnow:
             logging.config.fileConfig("logging.conf")
         except:
             pass
-        if os.environ.get("DEBUG", "FALSE") == "TRUE":
+        if os.environ.get("DEBUG"):
             logging.getLogger().setLevel(logging.DEBUG)
     
     def get_raw_data(self, zipcode, distance=25):

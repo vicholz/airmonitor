@@ -3,6 +3,7 @@ import json
 import logging
 import requests
 import os
+import urllib3
 
 try:
     requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
@@ -23,7 +24,7 @@ class OpenWeather:
             logging.config.fileConfig("logging.conf")
         except:
             pass
-        if os.environ.get("DEBUG", "FALSE") ==  "TRUE":
+        if os.environ.get("DEBUG"):
             logging.getLogger().setLevel(logging.DEBUG)
     
     def get_raw_data(self, zipcode):
@@ -41,7 +42,7 @@ class OpenWeather:
 
 if __name__ == "__main__":
     ow = OpenWeather()
-    data = ow.get_data(os.environ.get("ZIPCODE","94521"))
+    data = ow.get_data(os.environ.get("ZIPCODE"))
 
     with open('openweather_data.json', 'w+') as f:
         f.write(json.dumps(data, sort_keys=True, indent=4))

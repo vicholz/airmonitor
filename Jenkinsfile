@@ -9,11 +9,6 @@ pipeline {
         cron('30 * * * *')
     }
     stages {
-        stage ('AirMonitor - Checkout') {
-            steps {
-                checkout([$class: 'GitSCM', branches: [[name: '**']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/vicholz/airmonitor']]])
-            }
-        }
         stage ('AirMonitor - Run') {
             steps {
                 withCredentials([

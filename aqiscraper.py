@@ -37,7 +37,7 @@ class AQIScraper:
             logging.config.fileConfig("logging.conf")
         except:
             pass
-        if os.environ.get("DEBUG", "FALSE") ==  "TRUE":
+        if os.environ.get("DEBUG"):
             logging.getLogger().setLevel(logging.DEBUG)
         chrome_options = Options()
         chrome_options.add_experimental_option("prefs", preferences)
