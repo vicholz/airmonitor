@@ -139,7 +139,7 @@ if __name__ == "__main__":
     logging.debug(f"state:\n{state}")
     logging.debug(f"data:\n{json.dumps(airmon.state, sort_keys=True, indent=4)}")
     recipients = [(x,x) for x in os.environ.get("EMAIL_DEFAULT").split(",")]
-    logging.debug("Sending email notifications...")
+    logging.debug("Sending email notifications to:\n{recipients}")
     if state == 1:
         logging.info("State changed: GOOD->BAD")
         airmon.notify_sendgrid(
