@@ -14,6 +14,12 @@ from sendgrid.helpers.mail import Mail
 class AirMonitor:
     def __init__(self):
         self.state = defaultdict(dict)
+        try:
+            logging.config.fileConfig("logging.conf")
+        except:
+            pass
+        if os.environ.get("DEBUG"):
+            logging.getLogger().setLevel(logging.DEBUG)
 
     def load_previous_state(self, file="airmonitor_data.json"):
         if os.path.isfile(file):
