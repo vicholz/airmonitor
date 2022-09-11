@@ -118,21 +118,6 @@ if __name__ == "__main__":
     if os.environ.get("DEBUG", "FALSE") ==  "TRUE":
         log_level = logging.DEBUG
 
-    log_format = logging.Formatter("%(asctime)s - %(process)s - %(name)s - %(levelname)s - [%(module)s]: %(message)s")
-
-    logging.basicConfig(
-        format="%(asctime)s - %(process)s - %(name)s - %(levelname)s - [%(module)s]: %(message)s",
-        filemode='a',
-        level=log_level,
-        datefmt='%Y/%m/%d %H:%M:%S'
-    )
-    rotating_file_handler = handlers.RotatingFileHandler(
-        sys.argv[0].split("/")[-1].split(".")[0]+".log",
-        maxBytes=(1048576*25), backupCount=5
-    )
-    rotating_file_handler.setFormatter(log_format)
-    logging.getLogger().addHandler(rotating_file_handler)
-
     airmon = AirMonitor()
     airmon.load_previous_state()
     airmon.get_aqi_data()
