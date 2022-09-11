@@ -137,7 +137,7 @@ if __name__ == "__main__":
     state = airmon.compare_states()
     logging.debug("Comparing states...DONE!")
     logging.debug(f"state:\n{state}")
-    logging.debug("data:\n", json.dumps(airmon.state, sort_keys=True, indent=4))
+    logging.debug(f"data:\n{json.dumps(airmon.state, sort_keys=True, indent=4)}")
     recipients = [(x,x) for x in os.environ.get("RECIPIENTS").split(",")]
     logging.debug("Sending email notifications...")
     if state == 1:
